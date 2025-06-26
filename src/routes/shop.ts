@@ -1,13 +1,11 @@
-import express from "express";
-import path from "path";
-import { rootDir } from "../util/path";
-import { products } from "./admin";
+import express from 'express';
+import { products } from './admin';
 
 const router = express.Router();
 
-router.get("/", (req, res, next) => {
-  console.log("ASd", products);
-  res.sendFile(path.join(rootDir, "views", "shop.html"));
+router.get('/', (req, res, next) => {
+  // res.sendFile(path.join(rootDir, "views", "shop.pug"));
+  res.render('shop', { prods: products, docTitle: 'Shop', path: '/', pageTitle: 'Shop' });
 });
 
 export default router;

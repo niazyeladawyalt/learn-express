@@ -4,6 +4,7 @@
     "express": "^5.1.0"
   },
   "devDependencies": {
+    "@prettier/plugin-pug": "^3.4.0",
     "@types/body-parser": "^1.19.6",
     "@types/cookie-parser": "^1.4.9",
     "@types/express": "^5.0.3",
