@@ -1,22 +1,10 @@
 import express from 'express';
-import path from 'path';
-import { rootDir } from '../util/path';
+import adminController from '../controllers/admin';
 
-interface Product {
-  title: string;
-}
 const Router = express.Router();
 
-const products: Product[] = [];
-
-Router.get('/add-product', (req, res, next) => {
-  res.render('add-product', { pageTitle: 'Add Product', path: '/admin/add-product' });
-});
-
-Router.post('/add-product', (req, res, next) => {
-  products.push({ title: req.body.title });
-  res.redirect('/');
-});
+Router.get('/add-product', adminController.getAddProduct);
+Router.post('/add-product', adminController.postAddProduct);
+Router.get('/products', adminController.getAdminProduct);
 
 export default Router;
-export { products };

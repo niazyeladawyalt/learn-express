@@ -1,7 +1,8 @@
 {
   "dependencies": {
     "body-parser": "^2.2.0",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@prettier/plugin-pug": "^3.4.0",
@@ -16,6 +17,6 @@
     "typescript": "^5.8.3"
   },
   "scripts": {
-    "dev": "nodemon src/index.ts "
+    "dev": "nodemon --exec ts-node src/index.ts"
   }
 }

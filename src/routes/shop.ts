@@ -1,11 +1,15 @@
 import express from 'express';
-import { products } from './admin';
+import shopController from '../controllers/shop';
+
 
 const router = express.Router();
 
-router.get('/', (req, res, next) => {
-  // res.sendFile(path.join(rootDir, "views", "shop.pug"));
-  res.render('shop', { prods: products, docTitle: 'Shop', path: '/', pageTitle: 'Shop' });
-});
+router.get('/', shopController.getIndex);
+router.get('/products', shopController.getProducts);
+router.get('/product/:id', shopController.getProductDetails);
+
+router.get('/cart', shopController.getCart);
+router.get('/orders', shopController.getOrders);
+router.get('/checkout', shopController.getCheckout);
 
 export default router;
