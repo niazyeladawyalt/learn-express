@@ -45,10 +45,15 @@ class Product {
         getProductsFromFile(cb)
     }
 
-    static fetchSingle(cb: (product: any[]) => void, id: string): void {
-        const dd = getProductsFromFile(cb)
-        console.log("ddd", dd);
-    }
+   static fetchSingle(id: string, cb: (product: ProductType | undefined) => void): void {
+    getProductsFromFile((products: ProductType[]) => {
+        const foundProduct = products.find((product: ProductType) => {
+            return product.id === id;
+        });
+        cb(foundProduct);
+    });
+}
+
 
 }
 

@@ -1,6 +1,7 @@
 // controllers/products.ts
 import { Request, Response, NextFunction } from 'express';
 import Product from '../models/product';
+import Cart from '../models/cart';
 import { ProductType } from '../interfaces/Product';
 
 
@@ -33,12 +34,13 @@ const getIndex = (req: Request, res: Response, next: NextFunction) => {
 const getProductDetails = (req: Request, res: Response, next: NextFunction) => {
   // console.log("object",req.params);
   const { id } = req.params
-  Product.fetchSingle(() => {
+  Product.fetchSingle(id, (product: ProductType | undefined) => {
     res.render('shop/product-details', {
       pageTitle: 'Product Details',
-      path: '/'
+      path: '/',
+      product: product
     });
-  }, id)
+  })
 
 
 
@@ -51,6 +53,22 @@ const getCart = (req: Request, res: Response, next: NextFunction) => {
     pageTitle: 'Cart',
     path: '/cart'
   });
+};
+const postCart = (req: Request, res: Response, next: NextFunction) => {
+
+  const { productId } = req.body
+
+
+  console.log("Sd" , req.body);
+  Product.fetchSingle(productId, (product: ProductType | undefined) => {
+    if (!product) {
+      return res.status(404).json({ error: 'Product not found' });
+    }
+
+    Cart.addToCart(product.id, product.price);
+    res.redirect('/cart');
+  });
+
 };
 const getOrders = (req: Request, res: Response, next: NextFunction) => {
 
@@ -68,4 +86,4 @@ const getCheckout = (req: Request, res: Response, next: NextFunction) => {
   });
 };
 
-export default { getProducts, getProductDetails, getCart, getIndex, getCheckout, getOrders };
+export default { getProducts, getProductDetails, getCart, getIndex, getCheckout, getOrders, postCart };

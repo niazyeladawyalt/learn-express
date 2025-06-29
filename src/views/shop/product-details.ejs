@@ -7,7 +7,20 @@
         <%- include('../includes/navigation.ejs') %>
 
 
-            <main>
+            <main class="centered">
                 product details
+                <h1>
+                    <%= product.title %>
+                </h1>
+                <img src="<%= product.imageUrl %>" alt="">
+                <h2>$<%= product.price %>
+                </h2>
+                <p>
+                    <%= product.description %>
+                </p>
+
+                  <%- include('../includes/add-to-cart.ejs',{product:product}) %>
+
+
             </main>
             <%- include('../includes/end.ejs') %>
