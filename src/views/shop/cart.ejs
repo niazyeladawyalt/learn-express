@@ -8,6 +8,38 @@
 
 
             <main>
-               cart
+               <h1 class="mb-8">Cart</h1>
+
+                <% if (cart.products.length> 0) { %>
+                    <div class="grid grid-cols-4 gap-8">
+
+
+                     <% for (let product of cart.products) { %>
+                        <div class="shadow rounded-2xl overflow-hidden">
+                            <img src=" <%=  product.imageUrl %>" />
+                            <div class="p-4">
+                                <h2 class="text-lg"> <%=  product.title %> </h2>
+                                <p> price: $<%=  product.price %> </p>
+                                <p> QTY: <%=  product.qty %> </p>
+                                <div class="py-4">
+                                     <form action="/cart-delete" method="POST">
+                                        <input type="hidden" name="productId" value="<%= product.id %>">
+                                        <button type="submit" class="bg-red-400 text-white px-4 py-2 rounded cursor-pointer">
+                                        Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                      <% }%>
+                      </div>
+
+                      <h3 class="mt-8 text-2xl">Total Price: <%= cart.totalPrice %></h3>
+                <% }%>
+
+
             </main>
             <%- include('../includes/end.ejs') %>
