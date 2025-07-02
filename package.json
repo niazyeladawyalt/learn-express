@@ -3,6 +3,7 @@
     "@tailwindcss/cli": "^4.1.11",
     "body-parser": "^2.2.0",
     "express": "^5.1.0",
+    "mysql2": "^3.14.1",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
@@ -22,5 +23,12 @@
   },
   "scripts": {
     "dev": "nodemon --exec ts-node src/index.ts"
-  }
+  },
+  "name": "max",
+  "version": "1.0.0",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }

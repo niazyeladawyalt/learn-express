@@ -3,7 +3,8 @@ import express from 'express';
 import adminRoutes from './routes/admin';
 import shopRoutes from './routes/shop';
 import path from 'path';
-import notFound from './controllers/404'
+import notFound from './controllers/404';
+import db from './util/database';
 
 const app = express();
 const port = 3000;
@@ -16,9 +17,7 @@ app.set('views', path.join(__dirname, 'views')); // if running in src/
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-
 app.use(express.static('public'));
-
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
@@ -26,7 +25,6 @@ app.use(shopRoutes);
 app.use((req, res, next) => {
   res.status(404).render('404', {
     pageTitle: 'Page Not Found',
-    
   });
 });
 
