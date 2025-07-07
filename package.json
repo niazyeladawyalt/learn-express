@@ -22,7 +22,8 @@
     "typescript": "^5.8.3"
   },
   "scripts": {
-    "dev": "nodemon --exec ts-node src/index.ts"
+    "dev": "nodemon --exec ts-node src/index.ts",
+    "tailwind:watch": "tailwindcss -i ./public/css/tailwind.css -o ./public/css/output.css --watch"
   },
   "name": "max",
   "version": "1.0.0",
