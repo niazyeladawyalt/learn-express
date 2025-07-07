@@ -20,7 +20,7 @@
                             <div class="p-4">
                                 <h2 class="text-lg"> <%=  product.title %> </h2>
                                 <p> price: $<%=  product.price %> </p>
-                                <p> QTY: <%=  product.qty %> </p>
+                                <p> quantity: <%=  product.quantity %> </p>
                                 <div class="py-4">
                                      <form action="/cart-delete" method="POST">
                                         <input type="hidden" name="productId" value="<%= product.id %>">
@@ -37,7 +37,7 @@
                       <% }%>
                       </div>
 
-                      <h3 class="mt-8 text-2xl">Total Price: <%= cart.totalPrice %></h3>
+                      <h3 class="mt-8 text-2xl">Total Price: <%= cart.total %></h3>
                 <% }%>
 
 
