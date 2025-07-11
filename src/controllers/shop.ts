@@ -1,12 +1,12 @@
 // controllers/products.ts
 import { Request, Response, NextFunction } from 'express';
 import Product from '../models/product';
-import Cart from '../models/cart';
 import { renderProductsPage } from '../helpers/render';
+import Order from '../models/order';
 
 const getProducts = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    await renderProductsPage(res, 'shop/product-list', 'All Products', '/products');
+    await renderProductsPage(req, res, 'shop/product-list', 'All Products', '/products');
   } catch (error) {
     next(error);
   }
@@ -14,70 +14,96 @@ const getProducts = async (req: Request, res: Response, next: NextFunction) => {
 
 const getIndex = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    await renderProductsPage(res, 'shop/index', 'Shop', '/');
+    await renderProductsPage(req, res, 'shop/index', 'Shop', '/');
   } catch (error) {
     next(error);
   }
 };
 
 const getProductDetails = async (req: Request, res: Response, next: NextFunction) => {
-  // console.log("object",req.params);
   const { id } = req.params;
-  const [[product]] = await Product.fetchSingle(id);
-  // const product = rows[0];
-  res.render('shop/product-details', {
-    pageTitle: 'Product Details',
-    path: '/',
-    product: product,
-  });
+  try {
+    const product = await Product.findById(id);
+    console.log('Asd', product);
+    // console.log('Asd', product);
+    if (product) {
+      res.render('shop/product-details', {
+        pageTitle: 'Product Details',
+        path: '/',
+        product: product,
+      });
+    }
+  } catch (error) {}
 };
 
 const getCart = async (req: Request, res: Response, next: NextFunction) => {
-  const [rows] = await Cart.getProducts();
-  const cart = {
-    id: rows[0]?.cart_id,
-    total: rows[0]?.total_price,
-    products: rows.map((row) => ({
-      id: row.product_id,
-      title: row.title,
-      imageUrl: row.imageUrl,
-      price: row.price,
-      quantity: row.quantity,
-      total: row.total,
-    })),
-  };
-  res.render('shop/cart', {
+  await req.user.updateCartTotal();
+  const cart = await req.user.populate('cart.items.productId');
+  const cart2 = cart.cart;
+  const products = res.render('shop/cart', {
     pageTitle: 'Cart',
     path: '/cart',
-    cart: cart, // now passed correctly
+    cart: cart2,
   });
 };
 
 const postCart = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { productId } = req.body;
+    const product = await Product.findById(productId);
+    const result = await req.user.addToCart(product);
+    res.redirect('/cart');
+  } catch (error) {
+    console.error('Error in postCart:', error);
+    next(error);
+  }
+};
+
+const postDeleteCart = async (req: Request, res: Response, next: NextFunction) => {
   const { productId } = req.body;
   try {
-    await Cart.addToCart(1, productId);
+    await req.user.deleteFromCart(productId);
     res.redirect('/cart');
   } catch (error) {}
 };
-const postDeleteCart = async (req: Request, res: Response, next: NextFunction) => {
-  const { productId } = req.body;
-  // console.log("Sd" , req.body);
-  await Cart.deleteProductFromCart(1, productId);
-  res.redirect('/cart');
-};
-const getOrders = (req: Request, res: Response, next: NextFunction) => {
-  res.render('shop/orders', {
-    pageTitle: 'Orders',
-    path: '/orders',
-  });
-};
 
-const getCheckout = (req: Request, res: Response, next: NextFunction) => {
-  res.render('shop/checkout', {
-    pageTitle: 'Checkout',
-    path: '/checkout',
-  });
+const postUpdateCart = async (req: Request, res: Response, next: NextFunction) => {
+  // console.log('ddddddddd', req.body);
+  const { productId, change, quantity } = req.body;
+  await req.user.updateCartQuantity(productId, change);
+  res.redirect('/cart');
+  // try {
+  //   await req.user.deleteFromCart(productId);
+  // } catch (error) {}
+};
+const getOrders = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const orders = await Order.find({ userId: req.user._id }).populate('items.productId');
+    console.log('orders', orders);
+    res.render('shop/orders', {
+      pageTitle: 'Orders',
+      path: '/orders',
+      orders,
+    });
+  } catch (error) {
+    console.error('Error in getOrders:', error);
+    next(error);
+  }
+};
+const postOrder = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const orderItems = req.user.cart.items;
+    const order = new Order({
+      items: orderItems,
+      userId: req.user._id,
+    });
+    await order.save();
+    await req.user.clearCart();
+    res.redirect('/orders');
+  } catch (error) {
+    console.error('Failed to place order:', error);
+    res.status(500).send('Something went wrong while placing your order.');
+  }
 };
 
 export default {
@@ -85,8 +111,9 @@ export default {
   getProductDetails,
   getCart,
   getIndex,
-  getCheckout,
   getOrders,
   postCart,
   postDeleteCart,
+  postOrder,
+  postUpdateCart,
 };

@@ -12,11 +12,6 @@ body {
   font-family: 'Open Sans', sans-serif;
 }
 
-main {
-  padding: 1rem;
-  margin: auto;
-}
-
 form {
   display: inline;
 }
@@ -51,12 +46,6 @@ form {
 .main-header__item a {
   text-decoration: none;
   color: white;
-}
-
-.main-header__item a:hover,
-.main-header__item a:active,
-.main-header__item a.active {
-  color: #ffeb3b;
 }
 
 .mobile-nav {

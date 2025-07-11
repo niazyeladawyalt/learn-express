@@ -1,0 +1,6 @@
+node_modules
+dist
+build
+
+# EJS partials
+src/views/includes/*

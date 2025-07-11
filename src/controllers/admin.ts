@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import Product from '../models/product';
 import { ProductType } from '../interfaces/Product';
 import { renderProductsPage } from '../helpers/render';
+// import User from '../models/user';
 
 const getAddProduct = (req: Request, res: Response, next: NextFunction) => {
   res.render('admin/edit-product', {
@@ -13,78 +14,90 @@ const getAddProduct = (req: Request, res: Response, next: NextFunction) => {
 
 const getEditProduct = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
-  // Product.fetchSingle(id, (product: ProductType | undefined) => {
-  //   if (!product) {
-  //     return res.redirect('/');
-  //   }
-
-  //   res.render('admin/edit-product', {
-  //     pageTitle: 'edit Product',
-  //     path: '/admin/edit-product',
-  //     product: product,
-  //     editing: true,
-  //   });
-  // });
-
-  const [[product]] = await Product.fetchSingle(id);
-  res.render('admin/edit-product', {
-    pageTitle: 'edit Product',
-    path: '/admin/edit-product',
-    product: product,
-    editing: true,
-  });
+  try {
+    const product = await Product.findById(id);
+    if (product) {
+      res.render('admin/edit-product', {
+        pageTitle: 'edit Product',
+        path: '/admin/edit-product',
+        product: product,
+        editing: true,
+      });
+    }
+  } catch (error) {}
 };
 
 const getAdminProduct = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    await renderProductsPage(res, 'admin/product-list', 'Admin Product', '/admin/products');
+    //console.lo('Dddd');
+    await renderProductsPage(req, res, 'admin/product-list', 'Admin Product', '/admin/products');
   } catch (error) {
     next(error);
   }
+};
+
+const getUserPage = async (req: Request, res: Response, next: NextFunction) => {
+  res.render('admin/edit-user', {
+    pageTitle: 'Add User',
+    path: '/admin/add-user',
+    editing: false,
+  });
 };
 
 const postAddProduct = async (req: Request, res: Response, next: NextFunction) => {
-  const { title, price, description, imageUrl } = req.body;
-  const product = new Product(null, title, price, description, imageUrl);
+  const { title, price, description, imgUrl } = req.body;
+  // console.log('Asd', req.session.user);
+  const product = new Product({ title, price, description, imgUrl, userId: req.user });
   try {
-    await product.addProduct();
-
+    await product.save();
     res.redirect('/');
-  } catch (error) {
-    next(error);
-  }
+  } catch (error) {}
 };
 
 const postEditProduct = async (req: Request, res: Response, next: NextFunction) => {
-  const { id, title, price, description, imageUrl } = req.body;
-  const product = new Product(id, title, price, description, imageUrl);
-  try {
-    await product.updateProduct();
+  const { id, title, price, description, imgUrl } = req.body;
 
-    res.redirect('/');
-  } catch (error) {
-    next(error);
-  }
-  // product.updateProduct();
-  // res.redirect('/');
+  try {
+    const product = await Product.findById(id);
+    if (product) {
+      product.title = title;
+      product.price = price;
+      product.description = description;
+      product.imgUrl = imgUrl;
+
+      await product.save(); // Persist changes
+
+      res.redirect('/');
+    }
+  } catch (error) {}
 };
 
 const postDeleteProduct = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.body;
+  // console.log('Dddddd', id);
   try {
-    await Product.deleteProduct(id);
-
+    const product = await Product.findByIdAndDelete(id);
+    // await Product.deleteOne(id);
     res.redirect('/');
-  } catch (error) {
-    next(error);
-  }
+  } catch (error) {}
 };
 
-export default {
+const postAddUser = async (req: Request, res: Response, next: NextFunction) => {
+  // const { name, email } = req.body;
+  // const user = new User(name, email);
+  // try {
+  //   await user.save();
+  //   res.redirect('/');
+  // } catch (error) {}
+};
+
+export {
   getAddProduct,
   getAdminProduct,
   postAddProduct,
   getEditProduct,
   postEditProduct,
   postDeleteProduct,
+  getUserPage,
+  postAddUser,
 };

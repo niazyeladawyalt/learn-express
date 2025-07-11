@@ -1,18 +1,16 @@
+// tailwind.config.js
 module.exports = {
   content: ['./src/views/**/*.ejs'],
+  safelist: ['bg-primary-700', 'hover:bg-primary-800', 'focus:ring-primary-300'],
   theme: {
-    extend: {},
-    container: {
-      center: true,
-      padding: '1rem',
-      screens: {
-        sm: '640px',
-        md: '768px',
-        lg: '1024px',
-        xl: '1280px',
-        '2xl': '1440px',
+    extend: {
+      colors: {
+        primary: {
+          700: '#1d4ed8',
+          800: '#1e40af',
+          300: '#93c5fd',
+        },
       },
     },
   },
-  plugins: [],
 };

@@ -7,39 +7,59 @@
         <%- include('../includes/navigation.ejs') %>
 
 
-            <main>
-               <h1 class="mb-8">Cart</h1>
-
-                <% if (cart.products.length> 0) { %>
-                    <div class="grid grid-cols-4 gap-8">
+            <main class="py-8">
+                <div class="container mx-auto">
 
 
-                     <% for (let product of cart.products) { %>
-                        <div class="shadow rounded-2xl overflow-hidden">
-                            <img src=" <%=  product.imageUrl %>" />
-                            <div class="p-4">
-                                <h2 class="text-lg"> <%=  product.title %> </h2>
-                                <p> price: $<%=  product.price %> </p>
-                                <p> quantity: <%=  product.quantity %> </p>
-                                <div class="py-4">
-                                     <form action="/cart-delete" method="POST">
-                                        <input type="hidden" name="productId" value="<%= product.id %>">
-                                        <button type="submit" class="bg-red-400 text-white px-4 py-2 rounded cursor-pointer">
-                                        Delete
-                                        </button>
+                <h1 class="mb-8">Cart</h1>
+
+                <% if (cart.items.length> 0) { %>
+                        <div class="grid grid-cols-4 gap-8">
+
+
+                        <% for (let product of cart.items) { %>
+                            <div class="shadow rounded-2xl overflow-hidden">
+                                <img src=" <%=  product.productId.imgUrl %>" />
+                                <div class="p-4">
+                                    <h2 class="text-lg"> <%=  product.productId.title %> </h2>
+                                    <p> price: $<%=  product.productId.price %> </p>
+                                    <form action="/cart-update" method="POST" class="flex items-center gap-2">
+                                        <input type="hidden" name="productId" value="<%= product.productId._id %>">
+
+                                        <!-- Decrease -->
+                                        <button type="submit" name="change" value="-1" class="px-2 bg-gray-200 rounded">-</button>
+
+                                        <!-- Quantity display -->
+                                        <input type="number" name="quantity" value="<%= product.quantity %>" class="w-12 text-center border rounded" readonly>
+
+                                        <!-- Increase -->
+                                        <button type="submit" name="change" value="1" class="px-2 bg-gray-200 rounded">+</button>
                                     </form>
+
+                                    <div class="py-4">
+                                        <form action="/cart-delete" method="POST">
+                                            <input type="hidden" name="productId" value="<%= product.productId._id %>">
+                                            <button type="submit" class="bg-red-400 text-white px-4 py-2 rounded cursor-pointer">
+                                            Delete
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
+
+
+
                             </div>
-
-
-
+                        <% }%>
                         </div>
-                      <% }%>
-                      </div>
 
-                      <h3 class="mt-8 text-2xl">Total Price: <%= cart.total %></h3>
-                <% }%>
+                        <p class="my-8">Total Price: $<%=  cart.totalPrice %> </p>
 
+                        <form action="/create-order" method="POST">
+                            <button type="submit">Order Now</button>
+
+                        </form>
+                    <% }%>
+                </div>
 
             </main>
             <%- include('../includes/end.ejs') %>

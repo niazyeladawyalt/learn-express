@@ -1,22 +1,64 @@
 <%- include('../includes/head.ejs') %>
 
-    <link rel="stylesheet" href="/css/product.css" />
-    </head>
+<link rel="stylesheet" href="/css/product.css" />
+</head>
 
-    <body>
-        <%- include('../includes/navigation.ejs') %>
+<body>
+  <%- include('../includes/navigation.ejs') %>
 
 
-            <main class="">
-                <div class="container   mx-auto">
-                    <article class="text-center flex flex-col justify-center">
-                        <h1> <%= product.title %></h1>
-                        <img src="<%= product.imageUrl %>" alt="">
-                        <h2>$<%= product.price %>
-                        </h2>
-                        <p><%= product.description %></p>
-                    <%- include('../includes/add-to-cart.ejs',{product:product}) %>
-                    </article>
-                </div>
-            </main>
-            <%- include('../includes/end.ejs') %>
+  <main class="">
+
+
+    <div class="bg-gray-100">
+      <div class="container mx-auto px-4 py-8">
+        <div class="flex flex-wrap -mx-4">
+          <!-- Product Images -->
+          <div class="w-full md:w-1/2 px-4 mb-8">
+            <img src="<%= product.imgUrl %>" alt="Product" class="w-full h-auto rounded-lg shadow-md mb-4" id="mainImage" />
+          </div>
+
+          <!-- Product Details -->
+          <div class="w-full md:w-1/2 px-4">
+            <h2 class="text-3xl font-bold mb-2"><%= product.title %></h2>
+            <div class="mb-4">
+              <span class="text-2xl font-bold mr-2">$<%= product.price %></span>
+            </div>
+
+            <p class="text-gray-700 mb-6"><%= product.description %> </p>
+
+
+            <% if (isLoggedIn) { %>
+            <form action="/cart-update" method="POST" class="flex items-center gap-2">
+              <input type="hidden" name="productId" value="<%= product._id %>">
+
+              <!-- Decrease -->
+              <button type="submit" name="change" value="-1" class="px-2 bg-gray-200 rounded">-</button>
+
+              <!-- Quantity display -->
+              <input type="number" name="quantity" value="<%= product.quantity %>" class="w-12 text-center border rounded" readonly>
+
+              <!-- Increase -->
+              <button type="submit" name="change" value="1" class="px-2 bg-gray-200 rounded">+</button>
+            </form>
+
+            <div class="flex space-x-4 mb-6">
+
+              <%- include('../includes/add-to-cart.ejs',{product:product}) %>
+
+              <button class="bg-gray-200 flex gap-2 items-center text-gray-800 px-6 py-2 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                </svg>
+                Wishlist
+              </button>
+            </div>
+            <% } %>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+  <%- include('../includes/end.ejs') %>

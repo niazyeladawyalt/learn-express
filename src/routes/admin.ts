@@ -1,16 +1,29 @@
 import express from 'express';
-import adminController from '../controllers/admin';
+import {
+  getAddProduct,
+  getAdminProduct,
+  getEditProduct,
+  postAddProduct,
+  postDeleteProduct,
+  postEditProduct,
+} from '../controllers/admin';
+import { isAuth } from '../middleware/is-auth';
 
 const Router = express.Router();
 
-Router.get('/add-product', adminController.getAddProduct);
-Router.post('/add-product', adminController.postAddProduct);
+Router.use(isAuth);
 
-Router.get('/edit-product/:id', adminController.getEditProduct);
-Router.post('/edit-product', adminController.postEditProduct);
+Router.get('/add-product', getAddProduct);
+Router.post('/add-product', postAddProduct);
 
-Router.post('/delete-product', adminController.postDeleteProduct);
+Router.get('/edit-product/:id', getEditProduct);
+Router.post('/edit-product', postEditProduct);
 
-Router.get('/products', adminController.getAdminProduct);
+Router.post('/delete-product', postDeleteProduct);
+
+Router.get('/products', getAdminProduct);
+
+// Router.get('/users', getUserPage);
+// Router.post('/add-user', postAddUser);
 
 export default Router;
