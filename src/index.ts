@@ -12,7 +12,7 @@ import shopRoutes from './routes/shop';
 import authRoutes from './routes/auth';
 import User from './models/user';
 
-// Load environment variables
+// Load environment variablesd
 dotenv.config();
 
 // Constants
