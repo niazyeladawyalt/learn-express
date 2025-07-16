@@ -1,0 +1,9 @@
+<% if (errorMessages && errorMessages.length > 0) { %>
+<ul>
+  <% errorMessages.forEach(function(message) { %>
+  <li class="mb-4 text-sm text-red-800 rounded-lg dark:text-red-700" role="alert">
+    <span class="font-medium"><%= message.msg %></span>
+  </li>
+  <% }) %>
+</ul>
+<% } %>

@@ -22,14 +22,14 @@
           </div>
 
           <% if (editing) { %>
-            <input type="hidden" name="id" value="<%= user._id %>">
+          <input type="hidden" name="id" value="<%= user._id %>">
           <% } %>
-
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
           <button type="submit" class="btn">
             <%= editing ? 'Edit User' : 'Add User' %>
           </button>
         </form>
-       </div>
+      </div>
     </div>
 
   </main>

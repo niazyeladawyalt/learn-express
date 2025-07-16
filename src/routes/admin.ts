@@ -7,23 +7,21 @@ import {
   postDeleteProduct,
   postEditProduct,
 } from '../controllers/admin';
-import { isAuth } from '../middleware/is-auth';
+import { isAdmin, isAuth } from '../middleware/is-auth';
+import { productValidationRules } from '../validators/adminValidators';
 
 const Router = express.Router();
 
 Router.use(isAuth);
 
-Router.get('/add-product', getAddProduct);
-Router.post('/add-product', postAddProduct);
+Router.get('/add-product', isAdmin, getAddProduct);
+Router.post('/add-product', isAdmin, productValidationRules, postAddProduct);
 
-Router.get('/edit-product/:id', getEditProduct);
-Router.post('/edit-product', postEditProduct);
+Router.get('/edit-product/:id', isAdmin, getEditProduct);
+Router.post('/edit-product', productValidationRules, postEditProduct);
 
-Router.post('/delete-product', postDeleteProduct);
+Router.post('/delete-product', isAdmin, postDeleteProduct);
 
-Router.get('/products', getAdminProduct);
-
-// Router.get('/users', getUserPage);
-// Router.post('/add-user', postAddUser);
+Router.get('/products', isAdmin, getAdminProduct);
 
 export default Router;

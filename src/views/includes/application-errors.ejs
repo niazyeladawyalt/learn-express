@@ -1,0 +1,9 @@
+<% if (applicationErrors && applicationErrors.length > 0) { %>
+<ul>
+  <% applicationErrors.forEach(function(message) { %>
+  <li class="mb-4 text-sm text-red-800 rounded-lg dark:text-red-700" role="alert">
+    <span class="font-medium"><%= message %></span>
+  </li>
+  <% }) %>
+</ul>
+<% } %>

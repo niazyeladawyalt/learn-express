@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { Cart, CartItem } from '../types/cart';
+import { Cart } from '../types/cart';
 import Product from './product';
 
 const Schema = mongoose.Schema;
@@ -17,6 +17,8 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  resetToken: String,
+  resetTokenExp: Date,
   role: {
     type: String,
     enum: ['user', 'admin', 'manager'], // extend as needed

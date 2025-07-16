@@ -8,7 +8,9 @@
   <%- include('../includes/navigation.ejs') %>
 
   <main>
-    <form class="product-form" action="/admin/<%= editing ? 'edit-product' : 'add-product' %>" method="POST">
+    <form class="product-form" action="/admin/<%= editing ? 'edit-product' : 'add-product' %>" method="POST" enctype="multipart/form-data">
+
+      <%- include('../includes/validation-errors.ejs') %>
       <div class="form-control">
         <label for="title">Title</label>
         <input type="text" name="title" id="title" value="<%= typeof product !== 'undefined' && product.title ? product.title : '' %>" />
@@ -25,14 +27,18 @@
 
       </div>
 
-      <div class="form-control">
+      <!-- <div class="form-control">
         <label for="imgUrl">Image URL</label>
         <input type="text" name="imgUrl" id="imgUrl" value="<%= typeof product !== 'undefined' && product.imgUrl ? product.imgUrl : '' %>" />
+      </div> -->
+      <div class="form-control">
+        <label for="image">Image</label>
+        <input type="file" name="image" id="image" />
       </div>
-        <% if (editing) { %>
-        <input type="hidden" name="id" value="<%= product._id %>">
-        <% } %>
-
+      <% if (editing) { %>
+      <input type="hidden" name="id" value="<%= product._id %>">
+      <% } %>
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
       <button type="submit" class="btn">
         <%= editing ? 'Edit Product' : 'Add Product' %>
 

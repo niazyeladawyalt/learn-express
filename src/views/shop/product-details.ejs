@@ -15,7 +15,7 @@
         <div class="flex flex-wrap -mx-4">
           <!-- Product Images -->
           <div class="w-full md:w-1/2 px-4 mb-8">
-            <img src="<%= product.imgUrl %>" alt="Product" class="w-full h-auto rounded-lg shadow-md mb-4" id="mainImage" />
+            <img src="/<%= product.imgUrl %>" alt="Product" class="w-full h-auto rounded-lg shadow-md mb-4" id="mainImage" />
           </div>
 
           <!-- Product Details -->
@@ -37,7 +37,7 @@
 
               <!-- Quantity display -->
               <input type="number" name="quantity" value="<%= product.quantity %>" class="w-12 text-center border rounded" readonly>
-
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>">
               <!-- Increase -->
               <button type="submit" name="change" value="1" class="px-2 bg-gray-200 rounded">+</button>
             </form>

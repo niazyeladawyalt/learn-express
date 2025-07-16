@@ -12,6 +12,13 @@
   .active {
     @apply rounded-md bg-gray-500 px-3 py-2 text-sm font-medium text-white;
   }
+  .card__image {
+    @apply aspect-16/12;
+    img {
+      height: 100%;
+      object-fit: contain;
+    }
+  }
 }
 
 @theme {

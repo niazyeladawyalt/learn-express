@@ -13,6 +13,12 @@ const orderSchema = new Schema(
     userId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
+      required: true,
+    },
+    stripeSessionId: {
+      type: String,
+      required: true,
+      unique: true, // Optional: prevents duplicate webhook orders
     },
   },
   { timestamps: true }, // ✅ Enables createdAt and updatedAt fields
