@@ -34,7 +34,7 @@ export const signupValidation = [
     })
     .normalizeEmail(),
 
-  body('password').isStrongPassword().withMessage('Password is not strong enough!'),
+  body('password').trim().isLength({ min: 5 }).withMessage('Password is not strong enough!'),
 
   body('confirmPassword').custom((value, { req }) => {
     if (value !== req.body.password) {
